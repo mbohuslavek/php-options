@@ -22,6 +22,7 @@ class Options implements \Iterator
 	/** @var array */
 	private $triggeredOpts = array();
 
+	/** @var Option|NULL */
 	private $wantsArg = NULL;
 
 	public function setOption($name, $shortName = Option::INFER, $longName = Option::INFER)
@@ -45,6 +46,7 @@ class Options implements \Iterator
 	 */
 	public function parse(array $args)
 	{
+		$this->resetValues();
 		$nonPosixArgs = array();
 		while (!empty($args)) {
 			$arg = array_shift($args);
@@ -54,7 +56,7 @@ class Options implements \Iterator
 			} elseif (($name = $this->isLongOpt($arg)) !== FALSE) {
 				list($name, $value) = $this->separateOptAndValue($name);
 				if (!isset($this->longOpts[$name])) {
-					throw new UnknownOptionException($name, TRUE);
+					throw new UnknownOptionException($name);
 				}
 				$opt = clone $this->longOpts[$name];
 				$this->triggeredOpts[] = $opt; //TODO:
@@ -90,6 +92,12 @@ class Options implements \Iterator
 		return $this;
 	}
 
+	private function resetValues()
+	{
+		$this->triggeredOpts = array();
+		$this->wantsArg = NULL;
+	}
+
 	private function catchArg(Option $opt)
 	{
 		$this->checkRequiredArg(); // je to zde potřeba?
@@ -99,7 +107,7 @@ class Options implements \Iterator
 	private function checkRequiredArg()
 	{
 		if ($this->wantsArg !== NULL) {
-			throw new MissingArgumentException($this->wantsArg, TRUE);
+			throw new MissingArgumentException($this->wantsArg, FALSE);
 		}
 	}
 
@@ -112,7 +120,7 @@ class Options implements \Iterator
 		for ($i = 0; $i < strlen($opts); $i++) {
 			$flag = $opts[$i];
 			if (!isset($this->shortOpts[$flag])) {
-				throw new UnknownOptionException($flag);
+				throw new UnknownOptionException($flag, FALSE);
 			}
 			$opt = clone $this->shortOpts[$flag];
 			$this->triggeredOpts[] = $opt; //TODO:
@@ -205,7 +213,7 @@ class Options implements \Iterator
 
 	public function rewind()
 	{
-		rewind($this->triggeredOpts);
+		reset($this->triggeredOpts);
 	}
 
 	public function valid()
