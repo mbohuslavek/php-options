@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * This file is part of the PhpOptions library.
+ * Copyright (c) 2014 Michal Bohuslávek
+ */
+
 namespace PhpOptions;
 
 /**

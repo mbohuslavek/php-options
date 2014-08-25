@@ -1,0 +1,27 @@
+{
+	"name": "mbohuslavek/php-options",
+	"type": "library",
+	"description": "Better getopt library for PHP",
+	"keywords": ["getopt", "options"],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Michal Bohuslávek",
+			"email": "mbohuslavek@gmail.com"
+		}
+	],
+	"autoload": {
+		"psr-0": {
+			"PhpOptions": "src/"
+		},
+		"classmap": [
+			"src/PhpOptions/exceptions.php"
+		]
+	},
+	"require": {
+		"php": ">=5.3.1"
+	},
+	"require-dev": {
+		"nette/tester": "@dev"
+	}
+}
