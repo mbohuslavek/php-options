@@ -27,10 +27,11 @@ class Options implements \Iterator
 
 	public function setOption($name, $shortName = Option::INFER, $longName = Option::INFER)
 	{
-		$argDemand = Option::ARG_NONE;
-		if (preg_match('/^(.*?)(::?)(.*)$/', $name, $m)) {
+		if (preg_match('/^(.*?)(::?)$/', $name, $m)) {
 			$name = $m[1];
 			$argDemand = strlen($m[2]) === 1 ? Option::ARG_REQUIRED : Option::ARG_OPTIONAL;
+		} else {
+			$argDemand = Option::ARG_NONE;
 		}
 		$opt = new Option($name, $argDemand, $shortName, $longName);
 		$this->opts[$opt->name] = $opt;
@@ -59,7 +60,7 @@ class Options implements \Iterator
 					throw new UnknownOptionException($name);
 				}
 				$opt = clone $this->longOpts[$name];
-				$this->triggeredOpts[] = $opt; //TODO:
+				$this->triggeredOpts[] = $opt;
 				if ($value !== NULL) {
 					if ($opt->argDemand === Option::ARG_NONE) {
 						throw new UnexpectedArgumentException($opt);
@@ -123,7 +124,7 @@ class Options implements \Iterator
 				throw new UnknownOptionException($flag, FALSE);
 			}
 			$opt = clone $this->shortOpts[$flag];
-			$this->triggeredOpts[] = $opt; //TODO:
+			$this->triggeredOpts[] = $opt;
 			if ($opt->argDemand !== Option::ARG_NONE) {
 				$value = substr($opts, $i+1);
 				if ($value === FALSE && $opt->argDemand === Option::ARG_REQUIRED) {

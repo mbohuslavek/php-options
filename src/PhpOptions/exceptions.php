@@ -7,6 +7,10 @@
 
 namespace PhpOptions;
 
+class InvalidArgumentException extends \InvalidArgumentException
+{
+}
+
 /**
  * @author Michal Bohuslávek
  */

@@ -26,13 +26,24 @@ class Option
 
 	public $argDemand;
 
-	public function __construct($name, $argDemand, $shortName = self::INFER, $longName = self::INFER)
+
+	public function __construct($name, $argDemand = self::ARG_NONE, $shortName = self::INFER, $longName = self::INFER)
 	{
-		$this->argDemand = $argDemand;
+		if (!is_string($name) || $name === '') {
+			throw new InvalidArgumentException("Option name must be non-empty string.");
+		}
 		$this->name = $name;
-		$shortName === self::INFER && $shortName = $name{0};
-		$longName === self::INFER && $longName = strtolower($name);
-		$this->shortName = $shortName;
-		$this->longName = $longName;
+		$this->argDemand = $argDemand;
+		$this->shortName = $this->sanitizeName($shortName, $name{0});
+		$this->longName = $this->sanitizeName($longName, strtolower($name));
 	}
+
+	private function sanitizeName($value, $default)
+	{
+		if ($value === self::INFER) {
+			return $default;
+		}
+		return $value ?: NULL;
+	}
+
 }
