@@ -2,6 +2,9 @@
 
 namespace PhpOptions;
 
+/**
+ * @author Michal Bohuslávek
+ */
 abstract class OptionException extends \Exception
 {
 	/** @var Option */
@@ -31,6 +34,10 @@ abstract class OptionException extends \Exception
 	}
 }
 
+
+/**
+ * @author Michal Bohuslávek
+ */
 class MissingArgumentException extends OptionException
 {
 	protected function formatMsg()
@@ -39,6 +46,10 @@ class MissingArgumentException extends OptionException
 	}
 }
 
+
+/**
+ * @author Michal Bohuslávek
+ */
 class UnexpectedArgumentException extends OptionException
 {
 	protected function formatMsg()
@@ -47,6 +58,10 @@ class UnexpectedArgumentException extends OptionException
 	}
 }
 
+
+/**
+ * @author Michal Bohuslávek
+ */
 class UnknownOptionException extends \Exception
 {
 	/** @var string */

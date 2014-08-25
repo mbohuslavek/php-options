@@ -2,6 +2,9 @@
 
 namespace PhpOptions;
 
+/**
+ * @author Michal Bohuslávek
+ */
 class Option
 {
 	const INFER = TRUE;

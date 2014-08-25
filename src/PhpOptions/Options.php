@@ -2,6 +2,9 @@
 
 namespace PhpOptions;
 
+/**
+ * @author Michal Bohuslávek
+ */
 class Options implements \Iterator
 {
 	private $opts = array();
