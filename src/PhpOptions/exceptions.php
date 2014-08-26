@@ -11,6 +11,15 @@ class InvalidArgumentException extends \InvalidArgumentException
 {
 }
 
+class OptionAlreadyRegisteredException extends \InvalidArgumentException
+{
+	public function __construct($name, $longOption = TRUE, \Exception $previous = NULL)
+	{
+		$msg = ($longOption ? 'Long' : 'Short')." option '$name' is already registered.";
+		parent::__construct($msg, 0, $previous);
+	}
+}
+
 /**
  * @author Michal Bohuslávek
  */

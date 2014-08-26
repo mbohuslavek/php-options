@@ -12,7 +12,6 @@ namespace PhpOptions;
  */
 class Options implements \Iterator
 {
-	private $opts = array();
 	private $shortOpts = array();
 	private $longOpts = array();
 
@@ -44,11 +43,26 @@ class Options implements \Iterator
 		} else {
 			$argDemand = Option::ARG_NONE;
 		}
-		$opt = new Option($name, $argDemand, $shortName, $longName);
-		$this->opts[$opt->name] = $opt;
-		$this->shortOpts[$opt->shortName] = $opt;
-		$this->longOpts[$opt->longName] = $opt;
+		$this->registerOption(new Option($name, $argDemand, $shortName, $longName));
 		return $this;
+	}
+
+	private function registerOption(Option $opt)
+	{
+		$registered = FALSE;
+		foreach (array('short', 'long') as $prefix) {
+			if (($name = $opt->{$prefix.'Name'}) === NULL) {
+				continue;
+			}
+			$registered = TRUE;
+			if (isset($this->{$prefix.'Opts'}[$name])) {
+				throw new OptionAlreadyRegisteredException($name, $prefix === 'long');
+			}
+			$this->{$prefix.'Opts'}[$name] = $opt;
+		}
+		if ($registered === FALSE) {
+			throw new InvalidArgumentException("Either short or long option name must be set for option '$opt->name'.");
+		}
 	}
 
 	/**
