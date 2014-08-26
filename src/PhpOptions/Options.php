@@ -12,14 +12,17 @@ namespace PhpOptions;
  */
 class Options implements \Iterator
 {
+	/** @var Option[] */
 	private $shortOpts = array();
+
+	/** @var Option[] */
 	private $longOpts = array();
+
+	/** @var Option[] */
+	private $triggeredOpts = array();
 
 	/** @var array */
 	private $arguments = array();
-
-	/** @var array */
-	private $triggeredOpts = array();
 
 	/** @var Option|NULL */
 	private $wantsArg = NULL;
@@ -72,34 +75,17 @@ class Options implements \Iterator
 	 */
 	public function parse(array $args, $permuteArgs = TRUE)
 	{
-		$this->resetValues();
+		$this->triggeredOpts = array();
+		$this->wantsArg = NULL;
 		$toPermuteArgs = array();
 		while (!empty($args)) {
 			$arg = array_shift($args);
 			if ($this->isOptionsEnd($arg)) {
 				break;
 
-			} elseif (($name = $this->isLongOpt($arg)) !== FALSE) {
-				list($name, $value) = $this->separateOptAndValue($name);
-				if (!isset($this->longOpts[$name])) {
-					throw new UnknownOptionException($name);
-				}
-				$opt = clone $this->longOpts[$name];
-				$this->triggeredOpts[] = $opt;
-				if ($value === '' && $opt->argDemand === Option::ARG_REQUIRED) {
-					throw new MissingArgumentException($opt);
-
-				} elseif ($value != NULL) { // != intentionally
-					if ($opt->argDemand === Option::ARG_NONE) {
-						throw new UnexpectedArgumentException($opt);
-					}
-					$opt->value = $value;
-					continue;
-
-				} elseif ($opt->argDemand === Option::ARG_REQUIRED) {
-					$this->catchArg($opt);
-					continue;
-				}
+			} elseif (($opt = $this->isLongOpt($arg)) !== FALSE) {
+				$this->parseLongOpt($opt);
+				continue;
 
 			} elseif (($opts = $this->isShortOpt($arg)) !== FALSE) {
 				$this->parseShortOpts($opts);
@@ -122,10 +108,26 @@ class Options implements \Iterator
 		return $this;
 	}
 
-	private function resetValues()
+	private function parseLongOpt($opt)
 	{
-		$this->triggeredOpts = array();
-		$this->wantsArg = NULL;
+		list($name, $value) = $this->separateOptAndValue($opt);
+		if (!isset($this->longOpts[$name])) {
+			throw new UnknownOptionException($name);
+		}
+		$opt = clone $this->longOpts[$name];
+		$this->triggeredOpts[] = $opt;
+		if ($value === '' && $opt->argDemand === Option::ARG_REQUIRED) {
+			throw new MissingArgumentException($opt);
+
+		} elseif ($value != NULL) { // != intentionally
+			if ($opt->argDemand === Option::ARG_NONE) {
+				throw new UnexpectedArgumentException($opt);
+			}
+			$opt->value = $value;
+
+		} elseif ($opt->argDemand === Option::ARG_REQUIRED) {
+			$this->catchArg($opt);
+		}
 	}
 
 	private function catchArg(Option $opt)
