@@ -45,10 +45,10 @@ class Options implements \Iterator
 	 * @param  array  $args
 	 * @return self
 	 */
-	public function parse(array $args)
+	public function parse(array $args, $permuteArgs = TRUE)
 	{
 		$this->resetValues();
-		$nonPosixArgs = array();
+		$toPermuteArgs = array();
 		while (!empty($args)) {
 			$arg = array_shift($args);
 			if ($this->isOptionsEnd($arg)) {
@@ -84,12 +84,15 @@ class Options implements \Iterator
 				$this->wantsArg = NULL;
 
 			} else {
-				$nonPosixArgs[] = $arg;
+				$toPermuteArgs[] = $arg;
+				if ($permuteArgs === FALSE) {
+					break;
+				}
 			}
 			$this->checkRequiredArg();
 		}
 		$this->checkRequiredArg();
-		$this->arguments = array_merge($nonPosixArgs, $args);
+		$this->arguments = array_merge($toPermuteArgs, $args);
 		return $this;
 	}
 
