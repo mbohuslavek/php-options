@@ -84,12 +84,12 @@ class Options implements \Iterator
 				break;
 
 			} elseif (($opt = $this->isLongOpt($arg)) !== FALSE) {
+				$this->checkArgAlreadyRequired();
 				$this->parseLongOpt($opt);
-				continue;
 
 			} elseif (($opts = $this->isShortOpt($arg)) !== FALSE) {
+				$this->checkArgAlreadyRequired();
 				$this->parseShortOpts($opts);
-				continue;
 
 			} elseif ($this->wantsArg) {
 				$this->wantsArg->value = $arg;
@@ -101,9 +101,8 @@ class Options implements \Iterator
 					break;
 				}
 			}
-			$this->checkRequiredArg();
 		}
-		$this->checkRequiredArg();
+		$this->checkArgAlreadyRequired();
 		$this->arguments = array_merge($toPermuteArgs, $args);
 		return $this;
 	}
@@ -126,17 +125,11 @@ class Options implements \Iterator
 			$opt->value = $value;
 
 		} elseif ($opt->argDemand === Option::ARG_REQUIRED) {
-			$this->catchArg($opt);
+			$this->wantsArg = $opt;
 		}
 	}
 
-	private function catchArg(Option $opt)
-	{
-		$this->checkRequiredArg(); // je to zde potřeba?
-		$this->wantsArg = $opt;
-	}
-
-	private function checkRequiredArg()
+	private function checkArgAlreadyRequired()
 	{
 		if ($this->wantsArg !== NULL) {
 			throw new MissingArgumentException($this->wantsArg, FALSE);
@@ -159,7 +152,7 @@ class Options implements \Iterator
 			if ($opt->argDemand !== Option::ARG_NONE) {
 				$value = substr($opts, $i+1);
 				if ($value === FALSE && $opt->argDemand === Option::ARG_REQUIRED) {
-					$this->catchArg($opt);
+					$this->wantsArg = $opt;
 				}
 				$opt->value = $value;
 				return;

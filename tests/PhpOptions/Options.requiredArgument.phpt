@@ -16,6 +16,8 @@ $asgSets = array(
 	array('-f'),
 	array('-f', '--'),
 	array('-f', '--bar'),
+	array('-f', '--bar', 'value'),
+	array('-bf', '--bar', '-f', 'value'),
 	array('--foo', '-b'),
 	array('--foo=', 'value'),
 );
