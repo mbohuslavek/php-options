@@ -13,17 +13,17 @@ namespace PhpOptions;
 class Option
 {
 	const INFER = TRUE;
-
 	const ARG_NONE = 0;
 	const ARG_OPTIONAL = 1;
 	const ARG_REQUIRED = 2;
 
 	/** @var string */
-	public $name, $shortName, $longName, $description;
+	private $name, $shortName, $longName;
 
-	/** @var string */
+	/** @var string|FALSE */
 	public $value = FALSE;
 
+	/** @var int */
 	public $argDemand;
 
 
@@ -44,6 +44,30 @@ class Option
 			return $default;
 		}
 		return $value ?: NULL;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getName()
+	{
+		return $this->name;
+	}
+
+	/**
+	 * @return string|NULL
+	 */
+	public function getShortName()
+	{
+		return $this->shortName;
+	}
+
+	/**
+	 * @return string|NULL
+	 */
+	public function getLongName()
+	{
+		return $this->longName;
 	}
 
 }

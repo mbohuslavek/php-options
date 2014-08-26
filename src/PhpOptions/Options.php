@@ -51,7 +51,7 @@ class Options implements \Iterator
 	{
 		$registered = FALSE;
 		foreach (array('short', 'long') as $prefix) {
-			if (($name = $opt->{$prefix.'Name'}) === NULL) {
+			if (($name = $opt->{'get'.lcfirst($prefix).'Name'}()) === NULL) {
 				continue;
 			}
 			$registered = TRUE;
@@ -61,7 +61,7 @@ class Options implements \Iterator
 			$this->{$prefix.'Opts'}[$name] = $opt;
 		}
 		if ($registered === FALSE) {
-			throw new InvalidArgumentException("Either short or long option name must be set for option '$opt->name'.");
+			throw new InvalidArgumentException("Either short or long option name must be set for option '{$opt->getName()}'.");
 		}
 	}
 
@@ -228,7 +228,7 @@ class Options implements \Iterator
 	public function key()
 	{
 		$opt = current($this->triggeredOpts);
-		return $opt->name;
+		return $opt->getName();
 	}
 
 	public function next()

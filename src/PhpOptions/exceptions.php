@@ -60,7 +60,7 @@ class MissingArgumentException extends OptionException
 {
 	protected function formatMsg()
 	{
-		return "No argument for option '{$this->option->name}'.";
+		return "No argument for option '{$this->option->getName()}'.";
 	}
 }
 
@@ -72,7 +72,7 @@ class UnexpectedArgumentException extends OptionException
 {
 	protected function formatMsg()
 	{
-		return "Option '{$this->option->name}' doesn't expect an argument.";
+		return "Option '{$this->option->getName()}' doesn't expect an argument.";
 	}
 }
 
