@@ -86,7 +86,10 @@ class Options implements \Iterator
 				}
 				$opt = clone $this->longOpts[$name];
 				$this->triggeredOpts[] = $opt;
-				if ($value != NULL) { // != intentionally
+				if ($value === '' && $opt->argDemand === Option::ARG_REQUIRED) {
+					throw new MissingArgumentException($opt);
+
+				} elseif ($value != NULL) { // != intentionally
 					if ($opt->argDemand === Option::ARG_NONE) {
 						throw new UnexpectedArgumentException($opt);
 					}
