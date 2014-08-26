@@ -40,7 +40,6 @@ class CustomOptions extends Options
 $options = new CustomOptions('foo,bar:');
 
 $opts = $options->parse(array('.fbbaz', '/foo', '/bar:first', '/bar', 'second', '//', 'other', 'args'))->getOptions();
-
 Assert::count(5, $opts);
 
 $values = array(TRUE, 'baz', TRUE, 'first', 'second');
