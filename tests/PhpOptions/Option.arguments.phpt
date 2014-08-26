@@ -10,12 +10,7 @@ Assert::throws(function () {
 	new Option('');
 }, 'PhpOptions\InvalidArgumentException');
 
-$options = new Options;
-$options
-	->setOption('a')
-	->setOption('b:')
-	->setOption('c::');
-
+$options = new Options('a,b:,c::');
 list($a, $b, $c) = $options->parse(array('-ab-ignore-value', '-c'))->getOptions();
 
 Assert::same(Option::ARG_NONE, $a->argDemand);

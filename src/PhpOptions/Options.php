@@ -25,6 +25,17 @@ class Options implements \Iterator
 	/** @var Option|NULL */
 	private $wantsArg = NULL;
 
+
+	public function __construct($options = NULL)
+	{
+		if ($options) {
+			$opts = explode(',', $options);
+			foreach ($opts as $opt) {
+				$this->setOption(trim($opt));
+			}
+		}
+	}
+
 	public function setOption($name, $shortName = Option::INFER, $longName = Option::INFER)
 	{
 		if (preg_match('/^(.*?)(::?)$/', $name, $m)) {
