@@ -9,12 +9,12 @@ $options = new Options;
 
 $options->setOption('foo::');
 
-Assert::count(1, $options->parse(array('-f'))->getOptions());
+Assert::count(3, $options->parse(array('-f', '--foo', '--foo='))->getOptions());
 foreach ($options as $opt => $value) {
 	Assert::false($value);
 }
 
-Assert::count(1, $options->parse(array('-f--bar'))->getOptions());
+Assert::count(2, $options->parse(array('-f--bar', '--foo=--bar'))->getOptions());
 foreach ($options as $opt => $value) {
 	Assert::same('--bar', $value);
 }

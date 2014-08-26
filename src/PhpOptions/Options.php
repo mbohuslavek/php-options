@@ -86,7 +86,7 @@ class Options implements \Iterator
 				}
 				$opt = clone $this->longOpts[$name];
 				$this->triggeredOpts[] = $opt;
-				if ($value !== NULL) {
+				if ($value != NULL) { // != intentionally
 					if ($opt->argDemand === Option::ARG_NONE) {
 						throw new UnexpectedArgumentException($opt);
 					}
@@ -96,8 +96,6 @@ class Options implements \Iterator
 				} elseif ($opt->argDemand === Option::ARG_REQUIRED) {
 					$this->catchArg($opt);
 					continue;
-				} else {
-					$opt->value = TRUE;
 				}
 
 			} elseif (($opts = $this->isShortOpt($arg)) !== FALSE) {
@@ -160,8 +158,6 @@ class Options implements \Iterator
 				}
 				$opt->value = $value;
 				return;
-			} else {
-				$opt->value = TRUE;
 			}
 		}
 	}

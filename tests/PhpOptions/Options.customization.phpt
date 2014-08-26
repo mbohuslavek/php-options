@@ -42,7 +42,7 @@ $options = new CustomOptions('foo,bar:');
 $opts = $options->parse(array('.fbbaz', '/foo', '/bar:first', '/bar', 'second', '//', 'other', 'args'))->getOptions();
 Assert::count(5, $opts);
 
-$values = array(TRUE, 'baz', TRUE, 'first', 'second');
+$values = array(FALSE, 'baz', FALSE, 'first', 'second');
 foreach ($options as $opt => $value) {
 	Assert::same(current($values), $value);
 	next($values);

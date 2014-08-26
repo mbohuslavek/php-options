@@ -30,6 +30,8 @@ Assert::throws(function () use ($options) {
 	$options->parse(array('--foo=value'));
 }, 'PhpOptions\UnexpectedArgumentException', "Option 'foo' doesn't expect an argument.");
 
-// test pass
-$options->parse(array('-f', 'value'));
-$options->parse(array('--foo', 'value'));
+Assert::count(2, $options->parse(array('-f', 'value', '--foo', 'value'))->getOptions());
+foreach ($options as $opt => $value) {
+	Assert::same('foo', $opt);
+	Assert::false($value);
+}
