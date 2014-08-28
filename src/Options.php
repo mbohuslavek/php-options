@@ -38,6 +38,13 @@ class Options implements \Iterator
 		}
 	}
 
+	/**
+	 * @param string $name
+	 * @param string $shortName
+	 * @param string $longName
+	 * @throws InvalidArgumentException
+	 * @throws OptionAlreadyRegisteredException
+	 */
 	public function setOption($name, $shortName = Option::INFER, $longName = Option::INFER)
 	{
 		if (preg_match('/^(.*?)(::?)$/', $name, $m)) {
@@ -69,8 +76,12 @@ class Options implements \Iterator
 	}
 
 	/**
-	 * Parses $args for options.
-	 * @param  array  $args
+	 * Parses $args for options. If $permuteArgs is set to FALSE,
+	 * the first non-option argument stops option parsing.
+	 * @param array $args
+	 * @throws MissingArgumentException
+	 * @throws UnexpectedArgumentException
+	 * @throws UnknownOptionException
 	 * @return self
 	 */
 	public function parse(array $args, $permuteArgs = TRUE)
@@ -136,10 +147,6 @@ class Options implements \Iterator
 		}
 	}
 
-	/**
-	 * @param  string $opts
-	 * @return Option|NULL
-	 */
 	private function parseShortOpts($opts)
 	{
 		for ($i = 0; $i < strlen($opts); $i++) {
@@ -161,8 +168,8 @@ class Options implements \Iterator
 	}
 
 	/**
-	 * @param  string  $arg
-	 * @return string|bool
+	 * @param string $arg
+	 * @return string|FALSE
 	 */
 	protected function isShortOpt($arg)
 	{
@@ -173,8 +180,8 @@ class Options implements \Iterator
 	}
 
 	/**
-	 * @param  string  $arg
-	 * @return string|bool
+	 * @param string $arg
+	 * @return string|FALSE
 	 */
 	protected function isLongOpt($arg)
 	{
@@ -185,19 +192,19 @@ class Options implements \Iterator
 	}
 
 	/**
-	 * @param  string $name
-	 * @return array
+	 * @param string $opt
+	 * @return array [name, value]
 	 */
-	protected function separateOptAndValue($name)
+	protected function separateOptAndValue($opt)
 	{
-		if (preg_match('/(.+?)=(.*)/', $name, $m)) {
+		if (preg_match('/(.+?)=(.*)/', $opt, $m)) {
 			return array($m[1], $m[2]);
 		}
-		return array($name, NULL);
+		return array($opt, NULL);
 	}
 
 	/**
-	 * @param  string  $arg
+	 * @param string $arg
 	 * @return bool
 	 */
 	protected function isOptionsEnd($arg)
