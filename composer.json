@@ -11,11 +11,11 @@
 		}
 	],
 	"autoload": {
-		"psr-0": {
-			"PhpOptions": "src/"
+		"psr-4": {
+			"PhpOptions\\": "src/"
 		},
 		"classmap": [
-			"src/PhpOptions/exceptions.php"
+			"src/exceptions.php"
 		]
 	},
 	"require": {
