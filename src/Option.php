@@ -20,11 +20,11 @@ class Option
 	/** @var string */
 	private $name, $shortName, $longName;
 
+	/** @var int */
+	private $argDemand;
+
 	/** @var string|FALSE */
 	public $value = FALSE;
-
-	/** @var int */
-	public $argDemand;
 
 
 	public function __construct($name, $argDemand = self::ARG_NONE, $shortName = self::INFER, $longName = self::INFER)
@@ -68,6 +68,14 @@ class Option
 	public function getLongName()
 	{
 		return $this->longName;
+	}
+
+	/**
+	 * @return int self::ARG_*
+	 */
+	public function getArgDemand()
+	{
+		return $this->argDemand;
 	}
 
 }

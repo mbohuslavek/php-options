@@ -13,6 +13,6 @@ Assert::throws(function () {
 $options = new Options('a,b:,c::');
 list($a, $b, $c) = $options->parse(array('-ab-ignore-value', '-c'))->getOptions();
 
-Assert::same(Option::ARG_NONE, $a->argDemand);
-Assert::same(Option::ARG_REQUIRED, $b->argDemand);
-Assert::same(Option::ARG_OPTIONAL, $c->argDemand);
+Assert::same(Option::ARG_NONE, $a->getArgDemand());
+Assert::same(Option::ARG_REQUIRED, $b->getArgDemand());
+Assert::same(Option::ARG_OPTIONAL, $c->getArgDemand());

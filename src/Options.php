@@ -126,16 +126,16 @@ class Options implements \Iterator
 		}
 		$opt = clone $this->longOpts[$name];
 		$this->triggeredOpts[] = $opt;
-		if ($value === '' && $opt->argDemand === Option::ARG_REQUIRED) {
+		if ($value === '' && $opt->getArgDemand() === Option::ARG_REQUIRED) {
 			throw new MissingArgumentException($opt);
 
 		} elseif ($value != NULL) { // != intentionally
-			if ($opt->argDemand === Option::ARG_NONE) {
+			if ($opt->getArgDemand() === Option::ARG_NONE) {
 				throw new UnexpectedArgumentException($opt);
 			}
 			$opt->value = $value;
 
-		} elseif ($opt->argDemand === Option::ARG_REQUIRED) {
+		} elseif ($opt->getArgDemand() === Option::ARG_REQUIRED) {
 			$this->wantsArg = $opt;
 		}
 	}
@@ -156,9 +156,9 @@ class Options implements \Iterator
 			}
 			$opt = clone $this->shortOpts[$flag];
 			$this->triggeredOpts[] = $opt;
-			if ($opt->argDemand !== Option::ARG_NONE) {
+			if ($opt->getArgDemand() !== Option::ARG_NONE) {
 				$value = substr($opts, $i+1);
-				if ($value === FALSE && $opt->argDemand === Option::ARG_REQUIRED) {
+				if ($value === FALSE && $opt->getArgDemand() === Option::ARG_REQUIRED) {
 					$this->wantsArg = $opt;
 				}
 				$opt->value = $value;
