@@ -13,16 +13,16 @@ namespace PhpOptions;
 class Options implements \Iterator
 {
 	/** @var Option[] */
-	private $shortOpts = array();
+	protected $shortOpts = array();
 
 	/** @var Option[] */
-	private $longOpts = array();
+	protected $longOpts = array();
 
 	/** @var Option[] */
-	private $triggeredOpts = array();
+	protected $triggeredOpts = array();
 
 	/** @var array */
-	private $arguments = array();
+	protected $arguments = array();
 
 	/** @var Option|NULL */
 	private $wantsArg = NULL;
@@ -47,17 +47,21 @@ class Options implements \Iterator
 	 */
 	public function setOption($name, $shortName = Option::INFER, $longName = Option::INFER)
 	{
-		if (preg_match('/^(.*?)(::?)$/', $name, $m)) {
-			$name = $m[1];
-			$argDemand = strlen($m[2]) === 1 ? Option::ARG_REQUIRED : Option::ARG_OPTIONAL;
-		} else {
-			$argDemand = Option::ARG_NONE;
-		}
+		$argDemand = $this->inferArgDemand($name);
 		$this->registerOption(new Option($name, $argDemand, $shortName, $longName));
 		return $this;
 	}
 
-	private function registerOption(Option $opt)
+	protected function inferArgDemand(&$name)
+	{
+		if (preg_match('/^(.*?)(::?)$/', $name, $m)) {
+			$name = $m[1];
+			return strlen($m[2]) === 1 ? Option::ARG_REQUIRED : Option::ARG_OPTIONAL;
+		}
+		return Option::ARG_NONE;
+	}
+
+	protected function registerOption(Option $opt)
 	{
 		$registered = FALSE;
 		foreach (array('short', 'long') as $prefix) {
