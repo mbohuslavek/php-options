@@ -12,7 +12,7 @@ $options
 	->setOption('bar')
 	;
 
-$asgSets = array(
+$argSets = array(
 	array('-f'),
 	array('-f', '--'),
 	array('-f', '--bar'),
@@ -21,10 +21,10 @@ $asgSets = array(
 	array('--foo', '-b'),
 	array('--foo=', 'value'),
 );
-foreach ($asgSets as $args) {
+foreach ($argSets as $args) {
 	Assert::throws(function () use ($options, $args) {
 		$options->parse($args);
-	}, 'PhpOptions\MissingArgumentException', "No argument for option 'foo'.");
+	}, 'PhpOptions\\MissingArgumentException', "No argument for option 'foo'.");
 }
 
 Assert::count(1, $options->parse(array('-f--bar'))->getOptions());

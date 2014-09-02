@@ -8,7 +8,7 @@ require __DIR__ . '/../bootstrap.php';
 
 Assert::throws(function () {
 	new Option('');
-}, 'PhpOptions\InvalidArgumentException');
+}, 'PhpOptions\\InvalidArgumentException');
 
 $options = new Options('a,b:,c::');
 list($a, $b, $c) = $options->parse(array('-ab-ignore-value', '-c'))->getOptions();
