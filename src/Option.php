@@ -34,16 +34,24 @@ class Option
 		}
 		$this->name = $name;
 		$this->argDemand = $argDemand;
-		$this->shortName = $this->sanitizeName($shortName, $name{0});
-		$this->longName = $this->sanitizeName($longName, strtolower($name));
+		$this->shortName = $this->inferShortName($shortName);
+		$this->longName = $this->inferLongName($longName);
 	}
 
-	private function sanitizeName($value, $default)
+	private function inferShortName($name)
 	{
-		if ($value === self::INFER) {
-			return $default;
+		if ($name === self::INFER) {
+			return $this->name{0};
 		}
-		return $value ?: NULL;
+		return $name ?: NULL;
+	}
+
+	private function inferLongName($name)
+	{
+		if ($name === self::INFER) {
+			return strlen($this->name) > 1 ? strtolower($this->name) : NULL;
+		}
+		return $name ?: NULL;
 	}
 
 	/**
