@@ -38,7 +38,7 @@ class Option
 		$this->longName = $this->inferLongName($longName);
 	}
 
-	private function inferShortName($name)
+	protected function inferShortName($name)
 	{
 		if ($name === self::INFER) {
 			return $this->name{0};
@@ -46,7 +46,7 @@ class Option
 		return $name ?: NULL;
 	}
 
-	private function inferLongName($name)
+	protected function inferLongName($name)
 	{
 		if ($name === self::INFER) {
 			return strlen($this->name) > 1 ? strtolower($this->name) : NULL;
